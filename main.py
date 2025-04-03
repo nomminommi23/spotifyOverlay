@@ -51,7 +51,20 @@ class MyMainWindow(QtWidgets.QMainWindow):
     def open_settings(self): # Open the settings window
         self.settings_window = SettingsWindow() # Create an instance of the SettingsWindow class
         self.settings_window.settings_applied.connect(self.apply_settings) # Connect the signal to the slot
+        self.settings_window.quit_signal.connect(self.closeEvent) # Connect the signal to the slot
+        self.settings_window.visible_signal.connect(self.changeVisibility) # Connect the signal to the slot
         self.settings_window.show()
+
+    def changeVisibility(self, isVisible):
+        if isVisible:
+            self.show()
+        else:
+            self.hide()
+
+    def closeEvent(self, isClosed): # Override the closeEvent method
+        if isClosed:
+            self.settings_window.close()
+            self.close()
 
     def apply_settings(self, color, position): # Apply the settings
         if color:
