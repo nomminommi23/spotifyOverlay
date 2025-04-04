@@ -102,6 +102,10 @@ class MyMainWindow(QtWidgets.QMainWindow):
                          f"\nalbum: {current_song['item']['album']['name']}")
         self.label.setText(self.text)  # Replace "New Text" with the text you want to display
         self.label.adjustSize()
+        shadow = QtWidgets.QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(1)
+        shadow.setOffset(5, 5)
+        self.label.setGraphicsEffect(shadow)
         self.label.setWordWrap(True)
 
 
