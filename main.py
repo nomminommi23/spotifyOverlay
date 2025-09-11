@@ -82,12 +82,12 @@ class MyMainWindow(QtWidgets.QMainWindow):
         data = json.loads(data)
         client_id = data["client_id"]
         client_secret = data["client_secret"]
-        redirect_uri = "https://discord.gg/Dan8jF3Q3q"
+        redirect_uri = "http://localhost:8888/callback"
         scope = "user-read-currently-playing"
         username = data["username"]
         try:
             token = SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri,
-                                scope=scope, username=username)
+                                scope=scope, username=username, show_dialog=True)
             spotify = spotipy.Spotify(auth_manager=token)
             current_song = spotify.current_user_playing_track()
         except Exception as e:
