@@ -1,1 +1,2 @@
 a overlay with no background to put it over other apps and display your current playing spotify song using spotify api
+please contact nomminommi23 on discord to get the api access enabled and to recive the client id and secret (all free)
