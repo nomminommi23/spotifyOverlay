@@ -3,6 +3,8 @@ import sys
 import requests
 from PyQt5 import QtWidgets, QtCore
 from PyQt5 import QtGui
+from PyQt5.QtGui import QPixmap
+from io import BytesIO
 from secondwindow import SettingsWindow
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -41,7 +43,7 @@ class MyMainWindow(QtWidgets.QMainWindow):
         # Position the label at the center of the window
         self.label.move(0, 0)
 
-    # Create a QTimer
+    # Create a QTimerG'
         self.update_label()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_label)
@@ -53,6 +55,7 @@ class MyMainWindow(QtWidgets.QMainWindow):
         self.settings_window.settings_applied.connect(self.apply_settings) # Connect the signal to the slot
         self.settings_window.quit_signal.connect(self.closeEvent) # Connect the signal to the slot
         self.settings_window.visible_signal.connect(self.changeVisibility) # Connect the signal to the slot
+        self.settings_window.cover_visible_signal.connect(self.changeCoverVisibility)
         self.settings_window.show()
 
     def changeVisibility(self, isVisible):
@@ -60,6 +63,13 @@ class MyMainWindow(QtWidgets.QMainWindow):
             self.show()
         else:
             self.hide()
+
+    def changeCoverVisibility(self, isCoverVisible):
+        if isCoverVisible:
+            self.album_cover_label.show()
+        else:
+            self.album_cover_label.hide()
+
 
     def closeEvent(self, isClosed): # Override the closeEvent method
         if isClosed:
@@ -107,6 +117,18 @@ class MyMainWindow(QtWidgets.QMainWindow):
         shadow.setOffset(5, 5)
         self.label.setGraphicsEffect(shadow)
         self.label.setWordWrap(True)
+        album_cover_url = current_song['item']['album']['images'][2]['url']
+        response = requests.get(album_cover_url)
+        pixmap = QPixmap()
+        pixmap.loadFromData(BytesIO(response.content).read())
+
+        # Create a QLabel for the album cover
+        if not hasattr(self, 'album_cover_label'):
+            self.album_cover_label = QtWidgets.QLabel(self)
+        self.album_cover_label.setPixmap(pixmap)
+        self.album_cover_label.setGeometry(50, 100, 64, 64)
+
+        print(current_song)
 
 
 
