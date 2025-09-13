@@ -6,6 +6,7 @@ class SettingsWindow(QtWidgets.QWidget):
     settings_applied = QtCore.pyqtSignal(str, str)
     quit_signal = QtCore.pyqtSignal(bool)
     visible_signal = QtCore.pyqtSignal(bool)
+    cover_visible_signal = QtCore.pyqtSignal(bool)
 
     def __init__(self):
         super().__init__()
@@ -32,23 +33,27 @@ class SettingsWindow(QtWidgets.QWidget):
 
         # Schaltflächen erstellen
         self.visibile_switch = QtWidgets.QCheckBox("Sichtbarkeit umschalten")
+        self.alvum_cover_visibile_switch = QtWidgets.QCheckBox("Album cover Sichtbarkeit umschalten")
         self.ok_button = QtWidgets.QPushButton("OK")
         self.cancel_button = QtWidgets.QPushButton("Abbrechen")
         self.quit_button = QtWidgets.QPushButton("Beenden")
 
         # Schaltflächen verbinden
         self.visibile_switch.clicked.connect(self.switch_visibility)
+        self.alvum_cover_visibile_switch.clicked.connect(self.switch_album_cover_visibility)
         self.ok_button.clicked.connect(self.emit_settings)
         self.cancel_button.clicked.connect(self.close)
         self.quit_button.clicked.connect(self.quit_event)
 
         # Schaltflächen zum Layout hinzufügen
         layout.addWidget(self.visibile_switch)
+        layout.addWidget(self.alvum_cover_visibile_switch)
         layout.addWidget(self.ok_button)
         layout.addWidget(self.cancel_button)
         layout.addWidget(self.quit_button)
 
         self.visibile_switch.setChecked(True)
+        self.alvum_cover_visibile_switch.setChecked(True)
 
         # Dialog-Layout festlegen
         self.setLayout(layout)
@@ -66,3 +71,7 @@ class SettingsWindow(QtWidgets.QWidget):
     def switch_visibility(self):
         self.isVisible = self.visibile_switch.isChecked()
         self.visible_signal.emit(self.isVisible)
+
+    def switch_album_cover_visibility(self):
+        isCoverVisible = self.alvum_cover_visibile_switch.isChecked()
+        self.cover_visible_signal.emit(isCoverVisible)
