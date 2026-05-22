@@ -138,3 +138,4 @@ app = QtWidgets.QApplication(sys.argv)
 myWindow = MyMainWindow()
 myWindow.show()
 app.exec_()
+beispiel = 1
